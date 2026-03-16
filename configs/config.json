@@ -1,0 +1,5 @@
+{
+  "vendor": "orbita",
+  "dll_path": "./assets/dll/orbital/CLock.dll",
+  "port": 9000
+}
