@@ -4,6 +4,7 @@ A modern Go-based hardware integration replacement tool for legacy Windows PMS v
 
 ## Features
 - **Embedded Web UI** for configuration and API testing on port `:9000`
+- **Dynamic Configuration:** Configure vendor-specific parameters (Ports, Hotel IDs, Mappings) directly in the browser.
 - **Legacy PMS API Endpoints** compatible with endpoints like `POST /dlock/write_card`, `POST /adel/read_card`
 - **Extensible `LockVendor` interface** for integrating Door Lock DLLs
 - **Mock Vendor** included out-of-the-box (`/mock/write_card`) to test external PMS API boundaries

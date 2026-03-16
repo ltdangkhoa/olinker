@@ -4,6 +4,7 @@ package platform
 
 import (
 	"fmt"
+	"path/filepath"
 	"golang.org/x/sys/windows"
 )
 
@@ -12,9 +13,14 @@ type DLLLoader struct {
 }
 
 func NewDLLLoader(path string) (*DLLLoader, error) {
-	dll, err := windows.LoadDLL(path)
+	absPath, err := filepath.Abs(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load DLL %s: %w", path, err)
+		return nil, fmt.Errorf("could not resolve absolute path for %s: %w", path, err)
+	}
+
+	dll, err := windows.LoadDLL(absPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load DLL %s (resolved: %s): %w", path, absPath, err)
 	}
 	return &DLLLoader{dll: dll}, nil
 }

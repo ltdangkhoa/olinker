@@ -1,9 +1,10 @@
 package core
 
 type VendorConfig struct {
-	Vendor  string `json:"vendor"`
-	DLLPath string `json:"dll_path"`
-	Port    int    `json:"port"`
+	Vendor   string            `json:"vendor"`
+	DLLPath  string            `json:"dll_path"`
+	Port     int               `json:"port"`
+	Settings map[string]string `json:"settings"`
 }
 
 type EncodeRequest struct {

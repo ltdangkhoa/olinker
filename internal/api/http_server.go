@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"olinker/internal/core"
 )
 
@@ -46,6 +47,9 @@ func (s *Server) Start() error {
 	// Legacy Main.cs used POST for read_card, but GET is also fine if needed. We register POST to match:
 	mux.HandleFunc("POST /{vendor}/read_card", s.handleStatus)
 	mux.HandleFunc("GET /{vendor}/read_card", s.handleStatus)
+
+	mux.HandleFunc("GET /config", s.handleGetConfig)
+	mux.HandleFunc("POST /config", s.handleSaveConfig)
 
 	// Web UI
 	mux.Handle("/", http.FileServer(http.Dir("web")))
@@ -124,4 +128,36 @@ func (s *Server) handleStatus(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
+}
+
+func (s *Server) handleGetConfig(w http.ResponseWriter, r *http.Request) {
+	configData, err := os.ReadFile("configs/config.json")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(configData)
+}
+
+func (s *Server) handleSaveConfig(w http.ResponseWriter, r *http.Request) {
+	var config core.VendorConfig
+	if err := json.NewDecoder(r.Body).Decode(&config); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	configData, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := os.WriteFile("configs/config.json", configData, 0644); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }

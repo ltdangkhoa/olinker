@@ -15,6 +15,12 @@ func LoadVendor(config core.VendorConfig) (LockVendor, error) {
 		v = NewBeTechVendor()
 	case "adel":
 		v = NewAdelVendor()
+	case "hune":
+		v = NewHuneVendor()
+	case "prousb":
+		v = NewProUSBVendor()
+	case "dlock":
+		v = NewDLockVendor()
 	case "mock":
 		v = NewMockVendor()
 	default:

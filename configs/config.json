@@ -1,5 +1,14 @@
 {
-  "vendor": "orbita",
+  "vendor": "hune",
   "dll_path": "./assets/dll/orbital/CLock.dll",
-  "port": 9000
+  "port": 9000,
+  "settings": {
+    "card_pass": "",
+    "com": "",
+    "encrypt": "",
+    "hotel_code": "",
+    "mapping": "",
+    "nblock": "",
+    "system_code": ""
+  }
 }
